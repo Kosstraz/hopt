@@ -54,15 +54,6 @@ strsplit(const char* restrict s, char sep)
 }
 
 unsigned int
-optorder_total(unsigned int* optorder, unsigned int count)
-{
-	unsigned int	total = 0;
-	for (unsigned int i = 0 ; i < count ; ++i)
-		total += optorder[i];
-	return (total);
-}
-
-unsigned int
 strlen2(char* restrict* restrict s)
 {
 	unsigned int	i = 0;

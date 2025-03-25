@@ -71,7 +71,6 @@ void			hopt_free_lstsort(t_hopt_sort* head);
 char**			strsplit(const char* restrict s, char sep);
 void			free2(void**  ptr2);
 unsigned int	strlen2(char* restrict* restrict s);
-unsigned int	optorder_total(unsigned int* optorder, unsigned int count);
 
 // core.c
 int

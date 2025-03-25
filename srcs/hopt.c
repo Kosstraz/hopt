@@ -14,12 +14,10 @@ t_hopt_map*		hopt_maps[HOPT_MAX_OPTIONS] = {0};	// extern global var in '__hopt_
 unsigned int	hopt_c_maps = 0;					// extern global var in '__hopt_.h'
 
 // Parse and interpret options for you :0
+// Call HOPT_ADD_OPTION(...) for each option before
 //
 // @param ac Arguments' program count
 // @param av Total arguments's program
-// @param buffer Your buffer to stock validation
-// @param optstr The options strings (in order of buffer bytes)
-// @param optargcount The arguments options can handling (nullable if all options have ZERO arg)
 int
 hopt(int ac, char** av)
 {
@@ -52,6 +50,7 @@ hopt_create_map(char* names, int argc, void* mem, va_list va)
 }
 
 // Create new option mapping
+//
 // @param name Option aliases (ex: "c=-count=j"), option '-c' has 2 others alises : '--count' and '-j'
 // @param argc Count of option's arguments
 // @param mem Address in memory to fill
@@ -92,6 +91,7 @@ hopt_free(void)
 	}
 }
 
+// Return a string describe error (returned str must be free'd)
 char*
 hopt_strerror(void)
 {
@@ -143,7 +143,7 @@ hopt_strerror(void)
 	}
 }
 
-// @param overwrite The redefinition will overwrite the ancient definition [sorted] (1), OR just be ignored [unsorted] (0) ?
+// @param overwrite The redefinition will overwrite the ancient definition (1), OR just be ignored (0) ?
 void
 hopt_allow_redef(BOOL overwrite)
 {
@@ -151,12 +151,14 @@ hopt_allow_redef(BOOL overwrite)
 	hopt_redef_allowed = TRUE;
 }
 
+// Undef allowed is not sorted, same for undef unallowed
 void
 hopt_allow_undef(void)
 {
 	hopt_undef_allowed = TRUE;
 }
 
+// Stop parsing on first non-option argument
 void
 hopt_end_on_arg(void)
 {
@@ -172,27 +174,4 @@ hopt_reset(void)
 	hopt_redef_allowed = FALSE;
 	hopt_redef_overwrt = FALSE;
 	hopt_end_on_arg_v = FALSE;
-}
-
-char*
-hopt_see_hopt_help(void)
-{
-	return ("\e[1mHOPT HELP\e[0m:\n\
-\e[1mac:\e[0m Your program's arguments count\n\
-\e[1mav:\e[0m Your program's arguments value\n\
-\e[1mbuffer:\e[0m Your programmed structure/buffer, declared like that: \n\
-	\"typedef struct opt\n\
-	{\n\
-		char*	c;	// 0 arg\n\
-		char	e;	// 0 arg\n\
-		char*	a;	// 1 arg\n\
-		char	d;	// 0 arg\n\
-		char*	b;	// 1 arg\n\
-		char*	f[4];	// 4 args\n\
-	} t_opt;\"\n\
-\e[1moptstr:\e[0m A string that represent each options possibles (long or not), to follow the structure exemple :\n\
-	\e[2mhopt(ac, av, &_opt, \"c=-count:1/e/a:1/d=-detach/b=-bytes:1/f=o=-files-out:4\");\e[0m\n\
-	The OPTSTR must have the same order than your structure/buffer.\n\
-	When there is an '=' char, this is to allow different writing for an unique option (in this exemple, '-f' is along possible than '-o' or than '--files-output').\n\
-	Long option must begin with '-' (like: \"-option\", for --option), and shortcut must not begin with that and must have a size of 1 (like: \"f\", for -f).\n");
 }

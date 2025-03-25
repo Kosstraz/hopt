@@ -35,7 +35,6 @@ typedef struct hopt_map
 	int		type;
 }	t_hopt_map;
 
-//void hopt_add_desc(...);
 //void hopt_early_exit(BOOL (*fun)(char* option, int optlen));
 
 // Error code to specify error (look at 'hopt_cerr' to see which option is causing the error)
@@ -48,18 +47,17 @@ extern char		hopt_cerr[16];
 	*/
 
 // Parse and interpret options for you :0
+// Call HOPT_ADD_OPTION(...) for each option before
+// AV will be sorted after
 //
 // @param ac Arguments' program count
 // @param av Total arguments's program
-// @param buffer Your buffer to stock validation
-// @param optstr The options strings (in order of buffer bytes)
-// @param optargcount The arguments options can handling (nullable if all options have ZERO arg)
 int		hopt(int ac, char** av);
-//int	hopt(int ac, char** av, const t_hopt_map* restrict map);
 
 void	hopt_free(void);
 
 // Create new option mapping
+//
 // @param name Option aliases (ex: "c=-count=j"), option '-c' has 2 others alises : '--count' and '-j'
 // @param argc Count of option's arguments
 // @param mem Address in memory to fill
@@ -70,15 +68,8 @@ int		hopt_add_option(char* names, int argc, void* mem, ...);
 		UTILS for HOPT
 	*/
 
-// Set description for options (format : "i=-flood(To flood network)/f=-files:2(Set out and in file)/...")
-//// Return the HELP string associed to options
-//char*	hopt_set_help(const char* restrict optstr_desc);
-//// Return the HELP string associed to options (need to call HOPT_EST_HELP(str) before)
-//char*	hopt_get_help(void);
-// Return a string for the (potential) current error
-// (needs to free)
+// Return a string describe error (returned str must be free'd)
 char*	hopt_strerror(void);
-char*	hopt_see_hopt_help(void);
 
 	/*
 		OPTIONS for HOPT
@@ -88,6 +79,7 @@ char*	hopt_see_hopt_help(void);
 void	hopt_allow_undef(void);
 // @param overwrite The redefinition will overwrite the ancient definition (1), OR just be ignored (0) ?
 void	hopt_allow_redef(char overwrite);
+// Stop parsing on first non-option argument
 void	hopt_end_on_arg(void);
 void	hopt_reset(void);
 
